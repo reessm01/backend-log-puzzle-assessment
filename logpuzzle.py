@@ -85,7 +85,6 @@ def create_parser():
 
     return parser
 
-
 def main(args):
     """Parse args, scan for urls, get images from urls"""
     parser = create_parser()
