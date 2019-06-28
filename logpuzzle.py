@@ -52,9 +52,14 @@ def download_images(img_urls, dest_dir, base_url="http://code.google.com"):
     Creates the directory if necessary.
     """
     create_dir(dest_dir)
-    max_urls = len(img_urls)
+    img_tags = fetch_call(img_urls, dest_dir)
+    create_html(dest_dir, img_tags)
+
+def fetch_call(img_urls, dest_dir, base_url = "http://code.google.com"):
     img_tags = []
+    max_urls = len(img_urls)
     bar = Bar('Processing', max=max_urls)
+
     for i, url in enumerate(img_urls):
         filename = "/img" + str(i) + ".jpg"
         filepath = dest_dir + filename
@@ -63,14 +68,14 @@ def download_images(img_urls, dest_dir, base_url="http://code.google.com"):
             img_tags.append(filename)
         bar.next()
     bar.finish()
-    create_html(dest_dir, img_tags)
+    return img_tags
 
 def create_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
 def create_html(path, images):
-    img_tags = [ '<img src="' + "/" + path + "/" + image + '">' for image in images]
+    img_tags = [ '<img src="' + "/" + path + image + '">' for image in images]
     html_file = ["<html>\n", "<body>\n"] + img_tags + ["</body>\n", "</html>"]
 
     with open(path + "/index.html", "w+") as f:
